@@ -1,8 +1,21 @@
-<h1>This is the destinations page!</h1>
+<% include partials/header%>
+<div class="container">
+    <div class="jumbotron">
+        <h1>This is the destinations page!</h1>
+        <p>These are some of my favorite destinations!</p>
+    </div>
 
- <% for(var i=0; i<destinations.length;i++){ %>
-    <li>
-        <%= destinations[i]['name']%>
-        <img src="<%=destinations[i]['image']%>" alt="">
-    </li>
-<%}%>
+  <div class="row">
+        <% for(var i=0; i<destinations.length;i++){ %>
+        <div class="col-md-3 col-sm-6">
+            <div class="thumbnail">
+                <img src="<%=destinations[i]['image']%>" alt="">
+                <%=destinations[i]['name']%>
+            </div>       
+        </div>        
+         <%}%>
+    </div>      
+    
+</div>
+
+<% include partials/footer%>

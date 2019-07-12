@@ -1,0 +1,10 @@
+<% include partials/header%>
+
+<h1>Add a new destination!</h1>
+<form action="/destinations" method="POST">
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="image" placeholder="imageURL">
+    <button>Submit</button>
+</form>
+
+<% include partials/footer%>
