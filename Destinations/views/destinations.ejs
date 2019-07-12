@@ -1,0 +1,8 @@
+<h1>This is the destinations page!</h1>
+
+ <% for(var i=0; i<destinations.length;i++){ %>
+    <li>
+        <%= destinations[i]['name']%>
+        <img src="<%=destinations[i]['image']%>" alt="">
+    </li>
+<%}%>
