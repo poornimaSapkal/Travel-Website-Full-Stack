@@ -1,21 +1,33 @@
 <% include partials/header%>
-<div class="container">
-    <div class="jumbotron">
-        <h1>This is the destinations page!</h1>
-        <p>These are some of my favorite destinations!</p>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header"> 
+            <a href="/" class="navbar-brand">Destinations</a>
+        </div>
     </div>
+</nav>
+<div class="container">
+    <header class="jumbotron">
+        <h1>This is the destinations page!</h1>
+        <p>View our hand-pciked destinations from all over the world</p>
+        <p>
+            <a href="/campgrounds/new" class="btn btn-primary">Add New Destination</a> 
+        </p> 
+    </header>
 
-  <div class="row">
+    
+    <div class="row" style="display:flex; flex-wrap:wrap;">
         <% for(var i=0; i<destinations.length;i++){ %>
         <div class="col-md-3 col-sm-6">
             <div class="thumbnail">
                 <img src="<%=destinations[i]['image']%>" alt="">
-                <%=destinations[i]['name']%>
+                <div class="caption">
+                    <h4><%=destinations[i]['name']%></h4>
+                </div>               
             </div>       
         </div>        
          <%}%>
-    </div>      
-    
+    </div>         
 </div>
 
 <% include partials/footer%>
