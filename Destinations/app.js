@@ -3,6 +3,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose');
     Destination = require('./models/destination');
+    Comment = require('./models/comment');
     seedDB = require('./seed')
 mongoose.connect("mongodb://localhost/destinations", {useNewUrlParser: true});
 
@@ -26,7 +27,7 @@ app.get("/destinations", function(req, res){
             console.log("There was a problem fetching the data from the database");
             console.log(err);
         } else {
-            res.render("index", {destinations : destinations});
+            res.render("destinations/index", {destinations : destinations});
         }
     });  
 });
@@ -53,7 +54,7 @@ app.post("/destinations", function(req, res){
 
 //===NEW
 app.get("/destinations/new", function(req, res){
-    res.render("new");
+    res.render("destinations/new");
 });
 
 //===SHOW
@@ -66,11 +67,48 @@ app.get("/destinations/:id", function(req, res){
         if(err){
             console.log("There was an error!");
         } else {
-            res.render("show", {location:location})
+            res.render("destinations/show", {location:location})
         }
     });
     
 });
+
+//===COMMENTS ROUTE (NEW)
+app.get("/destinations/:id/comments/new", function(req, res){
+    var id = req.params.id;
+    Destination.findById(id, function(err, destination){
+        if(err){
+            console.log("Something went wrong!");
+            console.log(err)
+        } else {
+            res.render("comments/new", {destination: destination})
+        };
+    });
+});
+
+//===COMMENTS ROUTE (CREATE)
+app.post("/destinations/:id/comments", function(req, res){
+    //find the destination
+    Destination.findById(req.params.id).populate("comments").exec(function(err, destination){
+        if(err){
+            console.log(err);
+        } else {
+            Comment.create(req.body.comment, function(err, comment){
+                destination.comments.push(comment);
+                destination.save(function(err, post){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        res.render("destinations/show", {location:destination});
+                    }
+                });
+            });
+        };
+    });
+    
+});
+
+
 
 //===SETUP THE SERVER 
 app.listen("3000", function(){
