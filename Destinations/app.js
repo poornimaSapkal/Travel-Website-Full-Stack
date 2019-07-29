@@ -2,16 +2,9 @@ var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose');
-
+    Destination = require('./models/destination')
 mongoose.connect("mongodb://localhost/destinations", {useNewUrlParser: true});
 
- var destinationScheme = new mongoose.Schema({
-    name: String, 
-    image: String,
-    description: String
- });
-
- var Destination = mongoose.model("Destination", destinationScheme);
 
 //  Destination.create({
 //     name: 'Venice', 
