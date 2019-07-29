@@ -1,9 +1,15 @@
 var mongoose = require('mongoose');
-var destinationScheme = new mongoose.Schema({
+var destinationSchema = new mongoose.Schema({
     name: String, 
     image: String,
-    description: String
+    description: String,
+    comments: [
+        {
+           type: mongoose.Schema.Types.ObjectId,
+           ref: "Comment"
+        }
+     ]
  });
 
-var Destination = mongoose.model("Destination", destinationScheme);
+var Destination = mongoose.model("Destination", destinationSchema);
 module.exports = Destination;
