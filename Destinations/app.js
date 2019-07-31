@@ -33,6 +33,11 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+});
+
 //===SETUP THE ROUTES
 
 app.get("/", function(req, res){
@@ -93,7 +98,7 @@ app.get("/destinations/:id", function(req, res){
 });
 
 //===COMMENTS ROUTE (NEW)
-app.get("/destinations/:id/comments/new", function(req, res){
+app.get("/destinations/:id/comments/new", isLoggedIn, function(req, res){
     var id = req.params.id;
     Destination.findById(id, function(err, destination){
         if(err){
@@ -106,7 +111,7 @@ app.get("/destinations/:id/comments/new", function(req, res){
 });
 
 //===COMMENTS ROUTE (CREATE)
-app.post("/destinations/:id/comments", function(req, res){
+app.post("/destinations/:id/comments", isLoggedIn, function(req, res){
     //find the destination
     Destination.findById(req.params.id).populate("comments").exec(function(err, destination){
         if(err){
@@ -165,7 +170,14 @@ app.post("/login", passport.authenticate("local",
 app.get("/logout", function(req, res){
     req.logout();
     res.redirect("/");
-})
+});
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 //===SETUP THE SERVER 
 app.listen("3000", function(){
     console.log("The Server is up and running!");
