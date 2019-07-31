@@ -128,6 +128,8 @@ app.post("/destinations/:id/comments", function(req, res){
 });
 
 // AUTHENTICATION ROUTES
+
+//===NEW USER SIGN UP
 app.get("/register", function(req, res){
     res.render("register");
 });
@@ -145,8 +147,25 @@ app.post("/register", function(req, res){
     });
 });
 
+//EXISTING USER LOG IN
 
+app.get("/login", function(req, res){
+    res.render("login");
+});
 
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/destinations",
+        failureRedirect: "/login"
+    }), function(req, res){
+});
+
+// USER LOGOUT 
+
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
+})
 //===SETUP THE SERVER 
 app.listen("3000", function(){
     console.log("The Server is up and running!");
