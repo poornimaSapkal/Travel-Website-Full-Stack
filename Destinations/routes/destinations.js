@@ -87,6 +87,18 @@ router.put("/:id", function(req, res){
     
 });
 
+//DESTROY ROUTE
+router.delete("/:id", function(req, res){
+    var id = req.params.id;
+    Destination.findByIdAndDelete(id, function(err){
+        if(err){
+            res.redirect("/destinations");
+        } else {
+            res.redirect("/destinations");
+        }
+    });
+});
+
 
 //middleware  
 function isLoggedIn(req, res, next){
