@@ -62,6 +62,32 @@ router.get("/:id", function(req, res){
     
 });
 
+//EDIT DESTINATIONS ROUTE 
+router.get("/:id/edit", function(req, res){
+    var id = req.params.id;
+    Destination.findById(id, function(err, destination){
+        if(err){
+            res.redirect("/");
+        } else {
+            res.render("../views/destinations/edit", {destination:destination});
+        }
+    }) 
+});
+//UPDATE DESTINATIONS ROUTE 
+router.put("/:id", function(req, res){
+    var data = req.body.destination;
+    var id = req.params.id;
+    Destination.findByIdAndUpdate(id, data, function(err, newDestination){
+        if(err){
+            res.redirect("/");
+        } else {
+            res.redirect("/destinations/" +id)
+        }
+    })
+    
+});
+
+
 //middleware  
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){

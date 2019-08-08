@@ -7,6 +7,7 @@ var express = require('express'),
     seedDB = require('./seed'),
     passport = require('passport'),
     LocalStrategy = require('passport-local'),
+    methodOverride = require('method-override'),
     passportLocalMongoose = require('passport-local-mongoose'),
     User = require('./models/user') 
 
@@ -21,7 +22,8 @@ mongoose.connect("mongodb://localhost/destinations", {useNewUrlParser: true});
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine", "ejs");
-app.use(express.static(__dirname+"/public"))
+app.use(express.static(__dirname+"/public"));
+app.use(methodOverride("_method"));
 
 app.use(require('express-session')({
     secret: "Meow is the cutest cat in the world!",
