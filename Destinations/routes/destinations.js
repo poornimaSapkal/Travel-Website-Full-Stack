@@ -63,16 +63,13 @@ router.get("/:id", function(req, res){
 });
 
 //EDIT DESTINATIONS ROUTE 
-router.get("/:id/edit", function(req, res){
+router.get("/:id/edit", checkDestinationOwnership ,function(req, res){
     var id = req.params.id;
     Destination.findById(id, function(err, destination){
-        if(err){
-            res.redirect("/");
-        } else {
-            res.render("../views/destinations/edit", {destination:destination});
-        }
-    }) 
+        res.render("../views/destinations/edit", {destination:destination});
+    }); 
 });
+
 //UPDATE DESTINATIONS ROUTE 
 router.put("/:id", function(req, res){
     var data = req.body.destination;
@@ -107,5 +104,27 @@ function isLoggedIn(req, res, next){
     }
     res.redirect("/login");
 };
+
+function checkDestinationOwnership(req, res, next){
+    var id = req.params.id;
+    //is the user logged in 
+    if(req.isAuthenticated()){
+        Destination.findById(id, function(err, destination){
+            if(err){
+                res.redirect("back");
+            } else {
+                //does the user own the destination
+                if(destination.author.id.equals(req.user._id)){
+                    next();
+                } else {
+                    res.redirect("back")
+                }
+                
+            }
+        });
+    } else {
+        res.redirect("back")
+    }
+}
 
 module.exports = router;
