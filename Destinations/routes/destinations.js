@@ -85,7 +85,7 @@ router.put("/:id", function(req, res){
 });
 
 //DESTROY ROUTE
-router.delete("/:id", checkDestinationOwnership,  function(req, res){
+router.delete("/:id", checkDestinationOwnership, function(req, res){
     var id = req.params.id;
     Destination.findByIdAndDelete(id, function(err){
         if(err){

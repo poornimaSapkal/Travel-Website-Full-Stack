@@ -26,12 +26,13 @@ router.post("/", isLoggedIn, function(req, res){
             Comment.create(req.body.comment, function(err, comment){
                 comment.author.id = req.user._id;
                 comment.author.username = req.user.username;
+                comment.save();
                 destination.comments.push(comment);
                 destination.save(function(err, post){
                     if(err){
                         console.log(err);
+                        console.log("There was a problem adding the comment to the database!");
                     } else {
-                        console.log(comment)
                         res.render("destinations/show", {location:destination});
                     }
                 });
@@ -39,6 +40,39 @@ router.post("/", isLoggedIn, function(req, res){
         };
     });
     
+});
+
+//COMMENTS EDIT ROUTE
+router.get("/:comment_id/edit", function(req, res){
+    var comment_id = req.params.comment_id;
+    var destination_id = req.params.id;
+    Destination.findById(destination_id, function(err, foundDestination){
+        if(err){
+            console.log("Something went wrong. Could not find the destination");
+            console.log(err);
+        } else {
+            Comment.findById(comment_id, function(err, foundComment){
+                if(err){
+                    console.log("Something went wrong. Could not find comment!");
+                } else {
+                    res.render("comments/edit", {comment:foundComment, destination: foundDestination});
+                }
+            })
+        }
+    })
+});
+
+//COMMENTS EDIT COMMENT ROUTE
+router.put("/:comment_id", function(req, res){
+    var new_comment= req.body.comment;
+    var comment_id = req.params.comment_id;
+    Comment.findByIdAndUpdate(comment_id,new_comment, function(err, updatedComment){
+        if(err){
+            res.redirect("back")
+        } else {
+            res.redirect("/destinations/" +req.params.id);
+        }
+    })
 });
 
 //middleware
