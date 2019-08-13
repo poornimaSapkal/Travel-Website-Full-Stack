@@ -66,7 +66,7 @@ router.get("/:id", function(req, res){
 router.get("/:id/edit", checkDestinationOwnership ,function(req, res){
     var id = req.params.id;
     Destination.findById(id, function(err, destination){
-        res.render("../views/destinations/edit", {destination:destination});
+        res.render("../views/destinations/edit", {destination:destination, destination_id : req.params.id});
     }); 
 });
 

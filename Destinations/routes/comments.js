@@ -44,22 +44,13 @@ router.post("/", isLoggedIn, function(req, res){
 
 //COMMENTS EDIT ROUTE
 router.get("/:comment_id/edit", function(req, res){
-    var comment_id = req.params.comment_id;
-    var destination_id = req.params.id;
-    Destination.findById(destination_id, function(err, foundDestination){
+    Comment.findById(req.params.comment_id, function(err, foundComment){
         if(err){
-            console.log("Something went wrong. Could not find the destination");
-            console.log(err);
-        } else {
-            Comment.findById(comment_id, function(err, foundComment){
-                if(err){
-                    console.log("Something went wrong. Could not find comment!");
-                } else {
-                    res.render("comments/edit", {comment:foundComment, destination: foundDestination});
-                }
-            })
+            console.log("Something went wrong. Could not find comment!");
+            } else {
+            res.render("comments/edit", {comment:foundComment, destination_id: req.params.id});
         }
-    })
+    });
 });
 
 //COMMENTS EDIT COMMENT ROUTE
