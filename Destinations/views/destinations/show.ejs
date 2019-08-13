@@ -16,10 +16,13 @@
                 <div class="caption">
                     <p><%=location.description%></p>
                     <p><em>Submitted by <%= location.author.username%></em></p>
-                    <a class= "btn btn-warning" href="/destinations/<%= location.id%>/edit">Edit</a>
-                    <form id="delete-form" action="/destinations/<%= location.id%>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger"> Delete</button>
-                    </form>
+                    <% if(currentUser && location.author.id.equals(currentUser._id)){%>
+                        <a class= "btn btn-warning" href="/destinations/<%= location.id%>/edit">Edit</a>
+                        <form id="delete-form" action="/destinations/<%= location.id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger"> Delete</button>
+                        </form>
+                    <%}%>
+                    
                 </div>
             </div>
             <div class="well">
