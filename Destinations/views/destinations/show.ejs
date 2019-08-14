@@ -18,7 +18,7 @@
                     <p><em>Submitted by <%= location.author.username%></em></p>
                     <% if(currentUser && location.author.id.equals(currentUser._id)){%>
                         <a class= "btn btn-warning" href="/destinations/<%= location.id%>/edit">Edit</a>
-                        <form id="delete-form" action="/destinations/<%= location.id%>?_method=DELETE" method="POST">
+                        <form class="delete-form" action="/destinations/<%= location.id%>?_method=DELETE" method="POST">
                             <button class="btn btn-danger"> Delete</button>
                         </form>
                     <%}%>
@@ -40,6 +40,9 @@
                                href="/destinations/<%= location.id%>/comments/<%=comment._id%>/edit">
                                Edit
                             </a>
+                            <form class=" delete-form" action="/destinations/<%=location._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                            <input type="Submit" value="Delete" class="btn btn-xs btn-danger">
+                            </form>
                         </div>
                     </div>
                 <%})%>
