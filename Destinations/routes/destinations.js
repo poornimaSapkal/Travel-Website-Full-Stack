@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router({mergeParams:true});
-
 var Destination = require('../models/destination');
-var User = require('../models/user')
+var middleware = require('../middleware')
+
 //===INDEX
 router.get("/", function(req, res){
     Destination.find({}, function(err, destinations){
@@ -16,7 +16,7 @@ router.get("/", function(req, res){
 });
 
 //==CREATE
-router.post("/", isLoggedIn, function(req, res){
+router.post("/", middleware.isLoggedIn, function(req, res){
     var name = req.body.name;
     var image = req.body.image;
     var author = {
@@ -42,7 +42,7 @@ router.post("/", isLoggedIn, function(req, res){
 
 
 //===NEW
-router.get("/new", isLoggedIn, function(req, res){
+router.get("/new", middleware.isLoggedIn, function(req, res){
     res.render("destinations/new");
 });
 
@@ -63,7 +63,7 @@ router.get("/:id", function(req, res){
 });
 
 //EDIT DESTINATIONS ROUTE 
-router.get("/:id/edit", checkDestinationOwnership ,function(req, res){
+router.get("/:id/edit", middleware.checkDestinationOwnership ,function(req, res){
     var id = req.params.id;
     Destination.findById(id, function(err, destination){
         res.render("../views/destinations/edit", {destination:destination, destination_id : req.params.id});
@@ -85,7 +85,7 @@ router.put("/:id", function(req, res){
 });
 
 //DESTROY ROUTE
-router.delete("/:id", checkDestinationOwnership, function(req, res){
+router.delete("/:id", middleware.checkDestinationOwnership, function(req, res){
     var id = req.params.id;
     Destination.findByIdAndDelete(id, function(err){
         if(err){
@@ -96,35 +96,5 @@ router.delete("/:id", checkDestinationOwnership, function(req, res){
     });
 });
 
-
-//middleware  
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-};
-
-function checkDestinationOwnership(req, res, next){
-    var id = req.params.id;
-    //is the user logged in 
-    if(req.isAuthenticated()){
-        Destination.findById(id, function(err, destination){
-            if(err){
-                res.redirect("back");
-            } else {
-                //does the user own the destination
-                if(destination.author.id.equals(req.user._id)){
-                    next();
-                } else {
-                    res.redirect("back")
-                }
-                
-            }
-        });
-    } else {
-        res.redirect("back")
-    }
-}
 
 module.exports = router;
