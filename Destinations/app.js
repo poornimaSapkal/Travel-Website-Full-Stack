@@ -6,10 +6,11 @@ var express = require('express'),
     Comment = require('./models/comment');
     seedDB = require('./seed'),
     passport = require('passport'),
+    flash = require('connect-flash'),
     LocalStrategy = require('passport-local'),
     methodOverride = require('method-override'),
     passportLocalMongoose = require('passport-local-mongoose'),
-    User = require('./models/user') 
+    User = require('./models/user')
 
 //requiring routes
 var commentRoutes = require('./routes/comments'),
@@ -18,12 +19,13 @@ var commentRoutes = require('./routes/comments'),
 
 mongoose.connect("mongodb://localhost/destinations", {useNewUrlParser: true});
 
-// seedDB();//seeding the database 
+//seedDB();//seeding the database 
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
 
 app.use(require('express-session')({
     secret: "Meow is the cutest cat in the world!",
