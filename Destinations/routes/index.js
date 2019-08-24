@@ -19,11 +19,12 @@ router.post("/register", function(req, res){
     var name = req.body.username;
     User.register(new User({username: name}), req.body.password, function(err, user){
         if(err){
-            console.log(err);
+            req.flash("error", err.message);
             return res.redirect("/register");
         } 
         passport.authenticate("local")(req, res, function(){
-            res.redirect("destinations");
+            req.flash("success","Welcome to Destinations, "+ user.username);
+            res.redirect("/destinations");
         });
     });
 });
@@ -49,11 +50,4 @@ router.get("/logout", function(req, res){
     res.redirect("/");
 });
 
-
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-};
 module.exports = router;

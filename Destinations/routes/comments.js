@@ -34,6 +34,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
                         console.log(err);
                         console.log("There was a problem adding the comment to the database!");
                     } else {
+                        req.flash("success", "Successfully added comment");
                         res.render("destinations/show", {location:destination});
                     }
                 });
@@ -47,7 +48,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, function(req, res){
     Comment.findById(req.params.comment_id, function(err, foundComment){
         if(err){
-            console.log("Something went wrong. Could not find comment!");
+            req.flash("error", "Something went wrong");
             } else {
             res.render("comments/edit", {comment:foundComment, destination_id: req.params.id});
         }
@@ -62,6 +63,7 @@ router.put("/:comment_id", middleware.checkCommentOwnership, function(req, res){
         if(err){
             res.redirect("back")
         } else {
+            req.flash("success", "Your changes have been saved");
             res.redirect("/destinations/" +req.params.id);
         }
     })
@@ -73,6 +75,7 @@ router.delete("/:comment_id", middleware.checkCommentOwnership,function(req, res
         if(err){
             res.redirect("back");
         } else {
+            req.flash("success", "Comment has been deleted");
             res.redirect("/destinations/"+ req.params.id);
         };
     })

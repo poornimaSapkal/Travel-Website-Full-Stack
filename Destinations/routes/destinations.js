@@ -32,6 +32,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
             console.log("An error occurred");
         }
         else {
+            req.flash("success", "Your changes have been saved");
             console.log("Added a destination");
         }
     })
@@ -66,6 +67,9 @@ router.get("/:id", function(req, res){
 router.get("/:id/edit", middleware.checkDestinationOwnership ,function(req, res){
     var id = req.params.id;
     Destination.findById(id, function(err, destination){
+        if(err){
+            req.flash("error", "Something went wrong");
+        }
         res.render("../views/destinations/edit", {destination:destination, destination_id : req.params.id});
     }); 
 });
